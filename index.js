@@ -6,10 +6,11 @@ const {
     verifyRegistrationResponse, 
     generateAuthenticationOptions, 
     verifyAuthenticationResponse 
-} = require('@simplewebauthn/server');
+} = require('@simplewebauthn/erver');
 
-
-const PORT = 3000
+require('dotenv').config()
+s
+const PORT = 3000 || process.env.PORT
 const app = express();
 app.use(express.json())
 app.use('/', routes);
