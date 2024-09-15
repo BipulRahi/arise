@@ -6,7 +6,7 @@ const {
     verifyRegistrationResponse, 
     generateAuthenticationOptions, 
     verifyAuthenticationResponse 
-} = require('@simplewebauthn/erver');
+} = require('@simplewebauthn/server');
 
 require('dotenv').config()
 
