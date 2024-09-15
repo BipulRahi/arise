@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <form id="login-form">
+        <input type="text" placeholder="userId" id="username" />
+        <button type="submit">Login with Passkey</button>
+    </form>
+
+    <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
+    <script>
+         const form = document.getElementById('login-form');
+         const userIdField = document.getElementById('username')
+
+         form.addEventListener('submit', async e => {
+            e.preventDefault()
+            const username = userIdField.value;
+            
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username })
+            })
+
+            const challengeResult = await response.json()
+            const { options } = challengeResult // Server side challenge
+
+            const authenticationResult = await SimpleWebAuthnBrowser.startAuthentication(options)
+            console.log(authenticationResult)
+
+            await fetch('/login-verify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username,challenge:challengeResult.options.challenge, cred: authenticationResult })
+            })
+         })
+
+    </script>
+    <!--  Gsap is needed for Basic Effects -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<!-- Scroll Trigger is needed for Scroll Effects -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<!-- Three.js is needed for 3d Effects -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+
+<!-- ControlKit is needed for Debug Panel -->
+<script src="https://cdn.jsdelivr.net/gh/automat/controlkit.js@master/bin/controlKit.min.js"></script>
+<script src="../style.js"></script>
+
+</body>
+</html>
